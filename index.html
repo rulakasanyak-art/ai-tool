@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
-
 <title>FastTools AI Hub</title>
+
+<meta name="description" content="50 free AI tools in one place">
 
 <style>
 
@@ -22,7 +22,6 @@ justify-content:space-between;
 align-items:center;
 padding:20px 40px;
 background:rgba(0,0,0,0.3);
-backdrop-filter:blur(10px);
 }
 
 .logo{
@@ -30,56 +29,39 @@ font-size:22px;
 font-weight:bold;
 }
 
-.menu{
-display:flex;
-gap:25px;
-}
-
-.menu a{
-color:white;
-text-decoration:none;
-}
-
-.hero{
-text-align:center;
-padding:70px 20px;
-}
-
-.hero h1{
-font-size:40px;
-margin-bottom:10px;
-}
-
-.hero p{
-opacity:0.8;
+.search{
+padding:10px;
+border-radius:10px;
+border:none;
 }
 
 .tools{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
 padding:40px;
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 }
 
 .card{
 background:rgba(255,255,255,0.08);
-padding:30px;
-border-radius:15px;
+padding:20px;
+border-radius:12px;
 cursor:pointer;
+text-align:center;
 transition:0.3s;
-backdrop-filter:blur(8px);
 }
 
 .card:hover{
-background:rgba(255,255,255,0.18);
+background:rgba(255,255,255,0.2);
 transform:scale(1.05);
 }
 
-.chat{
+.toolBox{
+display:none;
 max-width:700px;
-margin:50px auto;
+margin:40px auto;
 background:rgba(255,255,255,0.08);
 padding:25px;
 border-radius:15px;
@@ -91,7 +73,6 @@ height:120px;
 border-radius:10px;
 border:none;
 padding:10px;
-font-size:16px;
 }
 
 button{
@@ -101,22 +82,14 @@ border:none;
 border-radius:10px;
 background:#00c6ff;
 color:white;
-font-size:16px;
 cursor:pointer;
 }
 
 #result{
-margin-top:20px;
+margin-top:15px;
 background:rgba(0,0,0,0.4);
 padding:15px;
 border-radius:10px;
-min-height:50px;
-}
-
-footer{
-text-align:center;
-padding:30px;
-opacity:0.6;
 }
 
 </style>
@@ -127,73 +100,126 @@ opacity:0.6;
 
 <header>
 
-<div class="logo">
-FastTools AI
-</div>
+<div class="logo">FastTools AI</div>
 
-<div class="menu">
-<a href="#">Home</a>
-<a href="#">Tools</a>
-<a href="#">AI Chat</a>
-</div>
+<input class="search" id="search" placeholder="Search AI tool...">
 
 </header>
 
-<div class="hero">
+<h1 style="text-align:center;margin-top:40px">
+50 AI Tools
+</h1>
 
-<h1>All AI Tools in One Place</h1>
+<div class="tools" id="tools"></div>
 
-<p>Your futuristic AI hub</p>
+<div class="toolBox" id="toolBox">
 
-</div>
+<h2 id="toolTitle"></h2>
 
-<div class="tools">
-
-<div class="card">AI Chat</div>
-
-<div class="card">Text Generator</div>
-
-<div class="card">Business Ideas</div>
-
-<div class="card">Brand Name Generator</div>
-
-<div class="card">Story Generator</div>
-
-<div class="card">Email Writer</div>
-
-<div class="card">Product Description</div>
-
-<div class="card">Social Media Post</div>
-
-<div class="card">Marketing Ideas</div>
-
-<div class="card">Startup Ideas</div>
-
-</div>
-
-<div class="chat">
-
-<h2>AI Chat</h2>
-
-<textarea id="input" placeholder="Ask anything..."></textarea>
+<textarea id="input" placeholder="Write your request..."></textarea>
 
 <br>
 
-<button onclick="askAI()">Ask AI</button>
+<button onclick="generate()">Generate</button>
 
 <div id="result"></div>
 
 </div>
 
-<footer>
-
-FastTools AI © 2026
-
-</footer>
-
 <script>
 
-function askAI(){
+const tools = [
+
+"AI Chat",
+"Text Generator",
+"Email Writer",
+"Business Ideas",
+"Brand Name Generator",
+"Story Generator",
+"Product Description",
+"Instagram Caption",
+"YouTube Title Generator",
+"Marketing Ideas",
+"Startup Ideas",
+"Domain Name Generator",
+"Slogan Generator",
+"Ad Copy Generator",
+"Tweet Generator",
+"Blog Title Generator",
+"Resume Generator",
+"Cover Letter Generator",
+"Essay Generator",
+"Paragraph Generator",
+"AI Translator",
+"Grammar Fixer",
+"AI Summarizer",
+"Article Generator",
+"Script Generator",
+"Podcast Ideas",
+"Book Ideas",
+"Character Generator",
+"Startup Name Generator",
+"AI Coach",
+"Workout Plan Generator",
+"Diet Plan Generator",
+"Travel Ideas",
+"Study Plan",
+"Learning Plan",
+"Motivation Generator",
+"Quote Generator",
+"AI Planner",
+"Goal Generator",
+"AI Mentor",
+"Product Name Generator",
+"Company Name Generator",
+"Logo Idea Generator",
+"Content Ideas",
+"AI Research Tool",
+"AI Problem Solver",
+"AI Tutor",
+"AI Brainstorm",
+"AI Note Generator",
+"AI Productivity Tool"
+
+];
+
+const toolsContainer = document.getElementById("tools");
+
+function renderTools(list){
+
+toolsContainer.innerHTML="";
+
+list.forEach(tool=>{
+
+let div=document.createElement("div");
+
+div.className="card";
+
+div.innerText=tool;
+
+div.onclick=()=>openTool(tool);
+
+toolsContainer.appendChild(div);
+
+});
+
+}
+
+renderTools(tools);
+
+function openTool(name){
+
+document.getElementById("toolBox").style.display="block";
+
+document.getElementById("toolTitle").innerText=name;
+
+document.getElementById("result").innerHTML="";
+
+window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+
+}
+
+function generate(){
 
 let text=document.getElementById("input").value;
 
@@ -203,12 +229,21 @@ return;
 }
 
 document.getElementById("result").innerHTML=
-"<b>You:</b> "+text+"<br><br><b>AI:</b> I'm your AI assistant.";
+"AI response:<br><br>"+text;
 
 }
+
+document.getElementById("search").addEventListener("input",function(){
+
+let value=this.value.toLowerCase();
+
+let filtered=tools.filter(tool=>tool.toLowerCase().includes(value));
+
+renderTools(filtered);
+
+});
 
 </script>
 
 </body>
-
 </html>
